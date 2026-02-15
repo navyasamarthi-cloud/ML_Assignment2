@@ -48,11 +48,11 @@ Build and compare six classification models on one dataset, evaluate them using 
 ```text
 project-folder/
 │-- app.py
+│-- train_models.py
+│-- __init__.py
 │-- requirements.txt
 │-- README.md
 │-- model/
-│   │-- __init__.py
-│   │-- train_models.py
 │   │-- artifacts/   (generated after first run)
 ```
 

@@ -5,12 +5,12 @@ from pathlib import Path
 from typing import Dict, Tuple
 
 import joblib
-import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.datasets import load_breast_cancer
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
     classification_report,
@@ -26,12 +26,11 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import GradientBoostingClassifier
 
 try:
     from xgboost import XGBClassifier
+
     HAS_XGBOOST = True
 except ModuleNotFoundError:
     XGBClassifier = None
@@ -39,7 +38,7 @@ except ModuleNotFoundError:
 
 
 BASE_DIR = Path(__file__).resolve().parent
-ARTIFACT_DIR = BASE_DIR / "artifacts"
+ARTIFACT_DIR = BASE_DIR / "model" / "artifacts"
 FEATURES_FILE = ARTIFACT_DIR / "feature_columns.json"
 METRICS_FILE = ARTIFACT_DIR / "metrics.csv"
 CONF_MAT_FILE = ARTIFACT_DIR / "confusion_matrices.json"
@@ -56,13 +55,11 @@ MODEL_FILENAMES = {
 }
 
 
-
 def _get_dataset() -> Tuple[pd.DataFrame, pd.Series]:
     data = load_breast_cancer(as_frame=True)
     features = data.frame.drop(columns=["target"])
     target = data.frame["target"]
     return features, target
-
 
 
 def _build_preprocessor(numeric_features: list[str]) -> ColumnTransformer:
@@ -77,7 +74,6 @@ def _build_preprocessor(numeric_features: list[str]) -> ColumnTransformer:
         transformers=[("num", numeric_transformer, numeric_features)],
         remainder="drop",
     )
-
 
 
 def _build_models(feature_names: list[str]) -> Dict[str, Pipeline]:
@@ -145,7 +141,6 @@ def _build_models(feature_names: list[str]) -> Dict[str, Pipeline]:
     return models
 
 
-
 def _evaluate_model(model: Pipeline, x_test: pd.DataFrame, y_test: pd.Series) -> dict:
     y_pred = model.predict(x_test)
 
@@ -170,11 +165,9 @@ def _evaluate_model(model: Pipeline, x_test: pd.DataFrame, y_test: pd.Series) ->
     return metrics
 
 
-
 def _save_json(path: Path, payload: dict) -> None:
     with path.open("w", encoding="utf-8") as file:
         json.dump(payload, file, indent=2)
-
 
 
 def train_and_save_models(force_retrain: bool = False) -> pd.DataFrame:
@@ -228,7 +221,6 @@ def train_and_save_models(force_retrain: bool = False) -> pd.DataFrame:
     return metrics_df
 
 
-
 def load_models() -> Dict[str, Pipeline]:
     loaded_models: Dict[str, Pipeline] = {}
 
@@ -240,12 +232,10 @@ def load_models() -> Dict[str, Pipeline]:
     return loaded_models
 
 
-
 def ensure_artifacts() -> pd.DataFrame:
     if not METRICS_FILE.exists():
         return train_and_save_models(force_retrain=True)
     return pd.read_csv(METRICS_FILE)
-
 
 
 def load_feature_info() -> dict:
@@ -253,11 +243,9 @@ def load_feature_info() -> dict:
         return json.load(file)
 
 
-
 def load_confusion_matrices() -> dict:
     with CONF_MAT_FILE.open("r", encoding="utf-8") as file:
         return json.load(file)
-
 
 
 def load_classification_reports() -> dict:

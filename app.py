@@ -16,7 +16,7 @@ from sklearn.metrics import (
     classification_report,
 )
 
-from model.train_models import (
+from train_models import (
     ensure_artifacts,
     load_classification_reports,
     load_confusion_matrices,
