@@ -32,11 +32,11 @@ st.caption("BITS ML Assignment 2: Logistic Regression, Decision Tree, KNN, Naive
 
 with st.sidebar:
     st.header("Controls")
-    retrain = st.button("Retrain and refresh artifacts")
+    retrain = st.button("Retrain and refresh files")
 
 if retrain:
     metrics_df = train_and_save_models(force_retrain=True)
-    st.success("Models retrained and artifacts updated.")
+    st.success("Models retrained and root files updated.")
 else:
     metrics_df = ensure_artifacts()
 
@@ -49,7 +49,7 @@ feature_columns = feature_info["feature_columns"]
 target_column = feature_info["target_column"]
 
 if not models:
-    st.error("No saved models found. Click 'Retrain and refresh artifacts' in sidebar.")
+    st.error("No saved models found. Click 'Retrain and refresh files' in sidebar.")
     st.stop()
 
 selected_model_name = st.selectbox("Select Model", options=list(models.keys()))

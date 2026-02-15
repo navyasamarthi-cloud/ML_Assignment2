@@ -3,9 +3,9 @@
 ## Cover Details
 - Course: Machine Learning
 - Assignment: Assignment 2
-- Name: ____________________
-- ID: ____________________
-- Date: ____________________
+- Name: Navya Alugubelli
+- ID: 2025ab05030
+- Date: 15/02/2026
 
 ---
 
@@ -20,14 +20,13 @@ Repository should contain:
 - __init__.py
 - requirements.txt
 - README.md
-- model/ folder (artifacts)
 
 ---
 
 ## 2) Live Streamlit App Link
 Paste your deployed Streamlit URL:
 
-[PASTE_STREAMLIT_APP_LINK_HERE]
+https://mlassignment2-djjjjz6cnrw9rhhi6t4s4b.streamlit.app/
 
 Expected when opened:
 - Interactive frontend loads successfully

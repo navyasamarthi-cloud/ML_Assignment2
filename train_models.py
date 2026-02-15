@@ -38,12 +38,11 @@ except ModuleNotFoundError:
 
 
 BASE_DIR = Path(__file__).resolve().parent
-ARTIFACT_DIR = BASE_DIR / "model" / "artifacts"
-FEATURES_FILE = ARTIFACT_DIR / "feature_columns.json"
-METRICS_FILE = ARTIFACT_DIR / "metrics.csv"
-CONF_MAT_FILE = ARTIFACT_DIR / "confusion_matrices.json"
-CLASS_REPORT_FILE = ARTIFACT_DIR / "classification_reports.json"
-TEST_SET_FILE = ARTIFACT_DIR / "test_set.csv"
+FEATURES_FILE = BASE_DIR / "feature_columns.json"
+METRICS_FILE = BASE_DIR / "metrics.csv"
+CONF_MAT_FILE = BASE_DIR / "confusion_matrices.json"
+CLASS_REPORT_FILE = BASE_DIR / "classification_reports.json"
+TEST_SET_FILE = BASE_DIR / "test_set.csv"
 
 MODEL_FILENAMES = {
     "Logistic Regression": "logistic_regression.pkl",
@@ -171,8 +170,6 @@ def _save_json(path: Path, payload: dict) -> None:
 
 
 def train_and_save_models(force_retrain: bool = False) -> pd.DataFrame:
-    ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
-
     if METRICS_FILE.exists() and not force_retrain:
         return pd.read_csv(METRICS_FILE)
 
@@ -201,7 +198,7 @@ def train_and_save_models(force_retrain: bool = False) -> pd.DataFrame:
         confusion_matrices[model_name] = metrics.pop("Confusion Matrix")
         classification_reports[model_name] = metrics.pop("Classification Report")
 
-        model_path = ARTIFACT_DIR / MODEL_FILENAMES[model_name]
+        model_path = BASE_DIR / MODEL_FILENAMES[model_name]
         joblib.dump(model, model_path)
 
         all_metrics.append({"ML Model Name": model_name, **metrics})
@@ -225,7 +222,7 @@ def load_models() -> Dict[str, Pipeline]:
     loaded_models: Dict[str, Pipeline] = {}
 
     for model_name, filename in MODEL_FILENAMES.items():
-        model_path = ARTIFACT_DIR / filename
+        model_path = BASE_DIR / filename
         if model_path.exists():
             loaded_models[model_name] = joblib.load(model_path)
 

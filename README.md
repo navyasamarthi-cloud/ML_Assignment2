@@ -19,7 +19,7 @@ Build and compare six classification models on one dataset, evaluate them using 
 5. Random Forest (Ensemble)
 6. XGBoost (Ensemble)
 
-### Comparison table (fill this from generated `model/artifacts/metrics.csv` after training)
+### Comparison table (fill this from generated `metrics.csv` after training)
 
 | ML Model Name | Accuracy | AUC | Precision | Recall | F1 | MCC |
 |---|---:|---:|---:|---:|---:|---:|
@@ -52,8 +52,17 @@ project-folder/
 │-- __init__.py
 │-- requirements.txt
 │-- README.md
-│-- model/
-│   │-- artifacts/   (generated after first run)
+│-- metrics.csv
+│-- confusion_matrices.json
+│-- classification_reports.json
+│-- feature_columns.json
+│-- test_set.csv
+│-- logistic_regression.pkl
+│-- decision_tree.pkl
+│-- knn.pkl
+│-- naive_bayes.pkl
+│-- random_forest.pkl
+│-- xgboost.pkl
 ```
 
 ## Local run instructions
@@ -66,7 +75,7 @@ project-folder/
    ```bash
    streamlit run app.py
    ```
-3. On first run, models and artifacts are generated in `model/artifacts/`.
+3. On first run, model files and result files are generated in the project root.
 
 ## Streamlit app features implemented
 - CSV dataset upload option for test data
